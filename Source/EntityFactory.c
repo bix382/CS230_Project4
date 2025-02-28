@@ -92,7 +92,6 @@ void EntityFactoryFreeAll() {
 	if (archetypes) {
 		EntityContainerFreeAll(archetypes);
 	}
-	//@@@ EntityContainerFree(archetypes);
 }
 
 //------------------------------------------------------------------------------

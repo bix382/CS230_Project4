@@ -107,7 +107,6 @@ Entity* EntityCreate(void) {
 //	   then return a pointer to the cloned Entity,
 //	   else return NULL.
 Entity* EntityClone(const Entity* other) {
-	//@@@
 	if (other) {
 		Entity* clone = EntityCreate();
 		if (clone) {

@@ -98,15 +98,15 @@ void BehaviorUpdate(Behavior* behavior, float dt) {
 	if (behavior) {
 		if (behavior->stateCurr != behavior->stateNext) {
 			if (behavior->onExit) {
-				behavior->onExit(behavior); //@@@
+				behavior->onExit(behavior); 
 				behavior->stateCurr = behavior->stateNext;
 				if (behavior->onInit) {
-					behavior->onInit(behavior); //@@@
+					behavior->onInit(behavior); 
 				}
 			}
 		}
 		if (behavior->onUpdate) {
-			behavior->onUpdate(behavior, dt); //@@@
+			behavior->onUpdate(behavior, dt); 
 		}
 	}
 }
