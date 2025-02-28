@@ -143,7 +143,7 @@ void SceneExit(const Scene* scene)
 		// Execute the Exit function.
 		(*scene->exit)();
 
-		EntityContainerFree(&entities);
+		EntityContainerFreeAll(entities);
 		EntityFactoryFreeAll();
 	}
 }
