@@ -17,6 +17,10 @@
 
 #include "Trace.h"
 
+#include "EntityContainer.h"
+#include "EntityFactory.h"
+#include "MeshLibrary.h"
+
 //------------------------------------------------------------------------------
 // Private Constants:
 //------------------------------------------------------------------------------
@@ -36,6 +40,8 @@
 //------------------------------------------------------------------------------
 // Private Variables:
 //------------------------------------------------------------------------------
+
+static EntityContainer* entities = NULL;
 
 //------------------------------------------------------------------------------
 // Private Function Declarations:
@@ -70,6 +76,9 @@ void SceneLoad(const Scene* scene)
 		// TODO: Call TraceMessage, passing the format string "%s: Load" and the name of the scene.
 		TraceMessage("%s: Load", scene->name);
 
+		entities = EntityContainerCreate();
+		MeshLibraryInit();
+
 		// Execute the Load function.
 		(*scene->load)();
 	}
@@ -99,9 +108,10 @@ void SceneUpdate(const Scene* scene, float dt)
 		// TODO: Call TraceMessage, passing the format string "%s: Update" and the name of the scene.
 		TraceMessage("%s: Update", scene->name);
 
-
 		// Execute the Update function.
 		(*scene->update)(dt);
+
+		EntityContainerUpdateAll(entities, dt);
 	}
 }
 
@@ -114,6 +124,7 @@ void SceneRender(const Scene* scene)
 		// TODO: Call TraceMessage, passing the format string "%s: Render" and the name of the scene.
 		TraceMessage("%s: Render", scene->name);
 
+		EntityContainerRenderAll(entities);
 
 		// Execute the Render function.
 		(*scene->render)();
@@ -129,9 +140,11 @@ void SceneExit(const Scene* scene)
 		// TODO: Call TraceMessage, passing the format string "%s: Exit" and the name of the scene.
 		TraceMessage("%s: Exit", scene->name);
 
-
 		// Execute the Exit function.
 		(*scene->exit)();
+
+		EntityContainerFree(&entities);
+		EntityFactoryFreeAll();
 	}
 }
 
@@ -144,9 +157,11 @@ void SceneUnload(const Scene* scene)
 		// TODO: Call TraceMessage, passing the format string "%s: Unload" and the name of the scene.
 		TraceMessage("%s: Unload", scene->name);
 
-
 		// Execute the Unload function.
 		(*scene->unload)();
+
+		EntityContainerFree(&entities);
+		MeshLibraryFreeAll();
 	}
 }
 
@@ -155,6 +170,14 @@ void SceneRestart(void)
 {
 	// Tell the Scene System to restart the active scene.
 	SceneSystemRestart();
+}
+
+// Add an Entity to the Scene.
+// (NOTE: This is done by storing the Entity within an EntityContainer.)
+// Params:
+//   entity = Pointer to the Entity to be added.
+void SceneAddEntity(Entity* entity) {
+	EntityContainerAddEntity(entities, entity);
 }
 
 //------------------------------------------------------------------------------

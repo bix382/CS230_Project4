@@ -18,6 +18,7 @@
 #include "Trace.h"
 #include "Stream.h"
 #include "Matrix2D.h"
+#include "MeshLibrary.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -82,6 +83,29 @@ Sprite* SpriteCreate(void) {
 	return NULL;
 }
 
+// Dynamically allocate a 
+// 
+// 
+// of an existing Sprite.
+// (Hint: Perform a shallow copy of the member variables.)
+// Params:
+//	 other = Pointer to the component to be 
+// d.
+// Returns:
+//	 If 'other' is valid and the memory allocation was successful,
+//	   then return a pointer to the cloned component,
+//	   else return NULL.
+Sprite* SpriteClone(const Sprite* other) {
+	if (other) {
+		Sprite* sprite = calloc(1, sizeof(Sprite));
+		if (sprite) {
+			*sprite = *other;
+			return sprite;
+		}
+	}
+	return NULL;
+}
+
 // Free the memory associated with a Sprite component.
 // (NOTE: The Sprite pointer must be set to NULL.)
 // Params:
@@ -101,6 +125,9 @@ void SpriteRead(Sprite* sprite, Stream stream) {
 	if (sprite && stream) {
 		sprite->frameIndex = StreamReadInt(stream);
 		sprite->alpha = StreamReadFloat(stream);
+		const char* token = StreamReadToken(stream);
+		const Mesh* mesh = MeshLibraryBuild(token);
+		SpriteSetMesh(sprite, mesh);
 	}
 }
 

@@ -19,6 +19,7 @@
 #include "SceneSystem.h"
 #include "StubScene.h"
 #include "Trace.h"
+#include "AsteroidsScene.h"
 
 //------------------------------------------------------------------------------
 // Libraries
@@ -134,7 +135,7 @@ static bool SceneSystemInit(void)
 {
 	// Set the starting (Default) scene.
 	// TODO: Change the starting (Default) scene from "Stub" to "Demo":
-	SceneSystemSetNext(Level1SceneGetInstance());
+	SceneSystemSetNext(AsteroidsSceneGetInstance());
 
 	return true;
 }

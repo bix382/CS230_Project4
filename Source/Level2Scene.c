@@ -126,7 +126,7 @@ static void Level2SceneLoad(void)
 // Initialize the entities and variables used by the scene.
 static void Level2SceneInit()
 {
-	instance.entityPtr = EntityFactoryBuild("./Data/SpaceshipHoming.txt");
+	instance.entityPtr = EntityFactoryBuild("SpaceshipHoming");
 	if (instance.entityPtr) {
 		Sprite* sprite = EntityGetSprite(instance.entityPtr);
 		SpriteSetMesh(sprite, instance.meshPtr);

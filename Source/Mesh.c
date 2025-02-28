@@ -12,6 +12,7 @@
 #include "stdafx.h"
 #include "Mesh.h"
 #include "DGL.h"
+#include "Stream.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -111,6 +112,53 @@ void MeshBuildSpaceship(Mesh* mesh) {
 	mesh->meshResource = DGL_Graphics_EndMesh();
 	strcpy_s(mesh->name, _countof(mesh->name), "spaceship");
 	mesh->drawMode = DGL_DM_TRIANGLELIST;
+}
+
+// Read the properties of a Mesh object from a file.
+// (NOTE: First, read a token from the file and verify that it is "Mesh".)
+// (NOTE: Second, read a token and store it in the Mesh's name variable.)
+// (NOTE: Third, read an integer indicating the number of vertices to be read.)
+// (NOTE: For each vertex, read a Vector2D (position), a DGL_Color (color), and a Vector2D (UV).)
+// (HINT: Call DGL_Graphics_AddVertex() to add a single vertex to the mesh.)
+// Params:
+//   mesh = Pointer to the Mesh.
+//	 stream = The data stream used for reading.
+void MeshRead(Mesh* mesh, Stream stream) {
+	if (mesh && stream) {
+		const char* token = StreamReadToken(stream);
+		if (strncmp(token, "Mesh", sizeof("Mesh")) == 0) {
+			*mesh->name = *StreamReadToken(stream);
+			int vertices = StreamReadInt(stream);
+			DGL_Graphics_StartMesh();
+			for (int i = 0; i < vertices; ++i) {
+				Vector2D pos, uv = { 0 };
+				DGL_Color color = { 0 };
+				StreamReadVector2D(stream, &pos);
+				StreamReadColor(stream, &color);
+				StreamReadVector2D(stream, &uv);
+				DGL_Graphics_AddVertex(&pos, &color, &uv);
+			}
+			mesh->meshResource = DGL_Graphics_EndMesh();
+		}
+	}
+}
+
+// Determines if a Mesh has the specified name.
+// (HINT: This function is similar to one in Entity.c.)
+// Params:
+//	 mesh = Pointer to the Mesh object.
+//	 name = Pointer to the name to be compared.
+// Returns:
+//	 If the mesh and name pointers are valid,
+//		then perform a string comparison and return the result (match = true),
+//		else return false.
+bool MeshIsNamed(const Mesh* mesh, const char* name) {
+	if (mesh && name) {
+		if (strcmp(mesh->name, name) == 0) {
+			return true;
+		}
+	}
+	return false;
 }
 
 // Render a mesh.

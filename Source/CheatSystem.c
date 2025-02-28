@@ -20,6 +20,9 @@
 #include "Level2Scene.h"
 #include "SandboxScene.h"
 #include "DemoScene.h"
+#include "AsteroidsScene.h"
+
+#define cheatSize 5
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -33,7 +36,8 @@ typedef struct CheatSystemKeyBinding
 } CheatSystemKeyBinding;
 
 static const CheatSystemKeyBinding keyBindings[] = { {'1', Level1SceneGetInstance}, {'2', Level2SceneGetInstance},
-													{'9', SandboxSceneGetInstance }, { '0', DemoSceneGetInstance } };
+													{'9', SandboxSceneGetInstance }, { '0', DemoSceneGetInstance }, 
+													{'3', AsteroidsSceneGetInstance }};
 
 //------------------------------------------------------------------------------
 // Private Structures:
@@ -109,7 +113,7 @@ static void CheatSystemUpdate(float dt)
 	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < cheatSize; i++) {
 		CheatSystemKeyBinding currKey = keyBindings[i];
 		if (DGL_Input_KeyTriggered(currKey.key)) {
 			SceneSystemSetNext(currKey.getInstance());
